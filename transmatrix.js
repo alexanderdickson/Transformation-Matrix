@@ -2,6 +2,8 @@
 
 var tm = {};
 
+window.t = tm;
+
 tm.identityMatrix = [1, 0, 0, 0, 1, 0, 0, 0, 1];
 tm.matrix = tm.identityMatrix;
 tm.vertices = [
@@ -22,8 +24,7 @@ tm.calculateMatrix = function() {
 				// Check if sin() or cos() is
 				// used, and if so, translate 
 				// them to the appropriate values.
-				debugger;
-				value = value.replace(/(math|cos)\((\d(?:\.\d+)?)\)/, function(all, type, number) {
+				value = value.replace(/(sin|cos)\((\d(?:\.\d+)?)\)/, function(all, type, number) {
 						return Math[type](number);
 				});
 				return parseFloat(value) || 0; 
@@ -73,9 +74,10 @@ tm.init = function() {
 			this.calculateMatrix();
 			this.draw();
 		}).bind(this));
-		form.addEventListener("input", (function(event) {
+		form.addEventListener("keyup", (function(event) {
 			var value = event.target.value;
-			event.target.type = /^\d+(?:\.\d+)?$/.test(value) ? "number" : "text";
+			console.log(value, event)
+			event.target.type = /^-?\d+(?:\.\d+)?$/.test(value) ? "number" : "text";
 		}).bind(this));
 	}).bind(this));
 };
