@@ -47,7 +47,7 @@ tm.draw = function() {
 	var currentValue;
 	var midWidth = canvas.width / 2;
 	var midHeight = canvas.height / 2;
- 	ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+ 	ctx.clearRect(-midWidth, -midHeight, canvas.width, canvas.width);
 
 	ctx.strokeStyle = ctx.fillStyle = "#ccc";
 	ctx.beginPath();
