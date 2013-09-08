@@ -44,10 +44,11 @@ tm.draw = function() {
 	var ctx = this.ctx;
 	var canvas = ctx.canvas;
 	var i;
-	var pixelGapBetweenPoints = 20;
+	var pixelGapBetweenPoints = 30;
 	var currentValue;
 	var midWidth = canvas.width / 2;
 	var midHeight = canvas.height / 2;
+	var textWidth;
  	ctx.clearRect(-midWidth, -midHeight, canvas.width, canvas.width);
 
 	ctx.strokeStyle = ctx.fillStyle = "#ccc";
@@ -60,7 +61,8 @@ tm.draw = function() {
 			continue;
 		}
      	if ( ! (currentValue % 2)) {
-     		ctx.fillText(currentValue, i - 3, -6);
+     		textWidth = ctx.measureText(i).width;
+     		ctx.fillText(i, i - textWidth / 2, -5);
      	}
 		ctx.moveTo(i + .5, -3);
 		ctx.lineTo(i + .5, 0);
@@ -76,7 +78,7 @@ tm.draw = function() {
 			continue;
 		}
      	if ( ! (currentValue % 2)) {
-	     	ctx.fillText(currentValue, 3, i );
+	     	ctx.fillText(i, 3, i + 5);
      	}
 		ctx.moveTo(-3, i + .5);
 		ctx.lineTo(0, i + .5);
