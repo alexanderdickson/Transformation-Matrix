@@ -2,13 +2,17 @@
   <head>
     <title>Transformation Matrix</title>
     <style>
-    	body {
-    		font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
+      body {
+        font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
         font-size: 12px;
-    	}
+      }
 
       canvas {
         border: 5px solid #ccc;
+      }
+
+      form {
+          overflow: hidden;
       }
 
       form legend {
@@ -19,6 +23,33 @@
       form fieldset {
         border: none;
         padding: 0;
+      }
+
+      form .form-panel {
+        float: left;
+        width: 280px;
+        margin-right: 10px;
+      }
+
+      form #buttons {
+        width: 100%;
+      }
+
+      form label {
+        width: 45px;
+        float: left;
+        clear: left;
+        padding-right: 5px;
+      }
+
+      form .form-panel:first-of-type input {
+        width: 50px;
+      }
+
+      form .form-panel:first-of-type input,
+      form .form-panel:first-of-type select {
+        float: left;
+        box-sizing: border-box;
       }
 
       form button {
@@ -36,9 +67,9 @@
       }
 
       form ol li {
-    	  display: block;
+        display: block;
         float: left;
-    	}
+      }
 
       form ol li:nth-child(3n+1) {
         clear: left;
@@ -50,37 +81,61 @@
     </style>
   </head>
   <body>
-  		<h1>Transformation Matrix</h1>
+      <h1>Transformation Matrix</h1>
 
-  		<form novalidate>
-	  		<fieldset>
-	  			<legend>Matrix</legend>
+      <form novalidate>
+          <fieldset class="form-panel">
 
-          <p>You may use <em>PI</em>, as well as <em>sin()</em> or <em>cos()</em>. Angles are in radians.</p>
-	  			
-	  			<ol>
-            <li><input type="number" name="cell" step="any" /></li>
-            <li><input type="number" name="cell" step="any" /></li>
-            <li><input type="number" name="cell" step="any" /></li>
-            <li><input type="number" name="cell" step="any" /></li>           
-            <li><input type="number" name="cell" step="any" /></li>
-            <li><input type="number" name="cell" step="any" /></li> 
-            <li><input type="number" name="cell" step="any" /></li>           
-            <li><input type="number" name="cell" step="any" /></li>
-            <li><input type="number" name="cell" step="any" /></li> 
-          </ol>
+            <legend>Preset Matrix</legend>
 
-          <button type="submit">Apply</button>
-          <button type="reset">Reset</button>
+            <p>Select an existing preset or set a custom matrix to the right.</p>
 
-	  		</fieldset>
-  		</form>
+            <label for="transformation-types">Type</label>
+            <select id="transformation-types">
+              <option value="">Manual</option>
+              <option value="translate-x">Translate X (px)</option>
+              <option value="translate-y">Translate Y (px)</option>
+              <option value="scale-x">Scale X (factor)</option>
+              <option value="scale-y">Scale Y (factor)</option>
+              <option value="rotate-cw">Rotate Clockwise (radians)</option>
+              <option value="rotate-ccw">Rotate Counter-Clockwise (radians)</option>
+              <option value="shear-x">Shear X (factor)</option>
+              <option value="shear-y">Shear Y (factor)</option>
+            </select>   
 
-  		<canvas width="600" height="600"></canvas>
+            <label for="transformation-type-value">Value</label>
+            <input type="number" value="0" id="transformation-type-value" />
+          </fieldset>
+          <fieldset class="form-panel">
 
-  		<p>By <a href="http://alexanderdickson.com">Alexander Dickson</a>.</p>
+            <legend>Custom Matrix</legend>
 
-	   <script src="dist/bundle.js"></script>
+            <p>You may use <em>PI</em>, as well as <em>sin()</em> or <em>cos()</em>. Angles are in radians.</p>
+            
+            <ol>
+              <li><input type="number" name="cell" step="any" /></li>
+              <li><input type="number" name="cell" step="any" /></li>
+              <li><input type="number" name="cell" step="any" /></li>
+              <li><input type="number" name="cell" step="any" /></li>           
+              <li><input type="number" name="cell" step="any" /></li>
+              <li><input type="number" name="cell" step="any" /></li> 
+              <li><input type="number" name="cell" step="any" /></li>           
+              <li><input type="number" name="cell" step="any" /></li>
+              <li><input type="number" name="cell" step="any" /></li> 
+            </ol>
+          </fieldset>
+          <fieldset id="buttons">
+            <button type="submit">Apply</button>
+            <button type="reset">Reset</button>
+          </fieldset>
+
+      </form>
+
+      <canvas width="600" height="600"></canvas>
+
+      <p>By <a href="http://alexanderdickson.com">Alexander Dickson</a>.</p>
+
+     <script src="dist/bundle.js"></script>
 
   </body>
  </html>

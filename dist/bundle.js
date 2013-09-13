@@ -92,6 +92,7 @@ tm.draw = function() {
 
 	// Draw object.
 	ctx.fillStyle = "goldenrod";
+	ctx.strokeStyle = "#000";
 	ctx.beginPath();
 	this.vertices.forEach(function(vertex) {
 		ctx.lineTo(vertex[0] + .5, vertex[1] + .5);
@@ -109,32 +110,91 @@ tm.updateInputs = function() {
 };
 
 tm.init = function() {
-	document.addEventListener("DOMContentLoaded", (function() {
+
+	var syncStates = function() {
+		var isCustom = !!this.transformationType.value;
+		this.transformationTypeInput.disabled = ! isCustom;
+		this.inputs.forEach(function(input) {
+			input.disabled = isCustom;
+		});
+	}.bind(this);
+
+	var presetCallbacks = function(type, value) {
+		var matrix = this.matrix;
+		({
+			"translate-x": function() {
+				matrix[2] = value;
+			},
+			"translate-y": function() {
+				matrix[5] = value;
+			},
+			"scale-x": function() {
+				matrix[0] = value;
+			},
+			"scale-y": function() {
+				matrix[4] = value;
+			},
+			"rotate-cw": function() {
+				matrix[0] = Math.cos(value);
+				matrix[1] = Math.sin(value);
+				matrix[3] = -Math.sin(value);
+				matrix[4] = Math.cos(value);			
+			},
+			"rotate-ccw": function() {
+				matrix[0] = Math.cos(value);
+				matrix[1] = -Math.sin(value);
+				matrix[3] = Math.sin(value);
+				matrix[4] = Math.cos(value);	
+			},
+			"shear-x": function() {
+				matrix[1] = value;
+			},
+			"shear-y": function() {
+				matrix[3] = value;
+			}
+
+		})[type]();
+		this.updateInputs();
+	}.bind(this);
+
+	document.addEventListener("DOMContentLoaded", function() {
 		var form = document.forms[0];
+		var matrixInputsContainer = form.querySelector("ol");
 		this.ctx = document.querySelector("canvas").getContext("2d");
 		this.ctx.translate(this.ctx.canvas.width / 2, this.ctx.canvas.height / 2);
+		this.transformationType = form.querySelector("select");
+		this.transformationTypeInput = form.querySelector("#transformation-type-value");
 
 		this.draw();
-		this.inputs = [].slice.call(form.querySelectorAll("input[type='number']"));
+		this.inputs = [].slice.call(matrixInputsContainer.querySelectorAll("input[type='number']"));
 		this.updateInputs();
-		form.addEventListener("submit", (function(event) {
+		form.addEventListener("submit", function(event) {
 			event.preventDefault();
 			this.calculateMatrix();
 			this.draw();
-		}).bind(this));
-		form.addEventListener("reset", (function(event) {
+		}.bind(this));
+		form.addEventListener("reset", function(event) {
 			event.preventDefault();
 			this.matrix = this.identityMatrix;
 			tm.vertices = tm.initialVertices.slice();
 			this.updateInputs();
+			this.transformationType.selectedIndex = this.transformationTypeInput.value = 0;
+			syncStates();
 			this.calculateMatrix();
 			this.draw();
-		}).bind(this));
-		form.addEventListener("keyup", (function(event) {
+		}.bind(this));
+		matrixInputsContainer.addEventListener("keyup", function(event) {
 			var value = event.target.value;
 			event.target.type = /^-?\d+(?:\.\d+)?$/.test(value) ? "number" : "text";
-		}).bind(this));
-	}).bind(this));
+		}.bind(this));
+		this.transformationType.addEventListener("change", function() {
+			syncStates();
+		}.bind(this));
+		this.transformationTypeInput.addEventListener("input", function() {
+			presetCallbacks(this.transformationType.value, this.transformationTypeInput.value);
+		}.bind(this));
+		syncStates();
+	}.bind(this));
 };
 
 tm.init();
